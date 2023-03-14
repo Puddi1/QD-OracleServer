@@ -21,9 +21,10 @@ const limiter = rateLimit({
 app.use(limiter)
 
 // Port
-app.listen(port, () => {
+let server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+server.timeout = 60_000;
 
 // Routes
 // All NFTs based on user address
