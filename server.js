@@ -15,32 +15,33 @@ app.use(cors());
 
 // Limiter
 const limiter = rateLimit({
-	windowMs: 1000 // 1 second
+    windowMs: 1000 // 1 second
 })
 // Appl to all requests
 app.use(limiter)
 
 // Port
 let server = app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`);
 })
 server.timeout = 60_000;
 
 // Routes
 // All NFTs based on user address
 app.get("/Moralis/WalletNFTs/:chain/:address", async (req, res) => {
-    console.log('\nRequest to /Moralis/WalletNFTs/:chain/:address')
+    console.log('\nRequest to /Moralis/WalletNFTs/:chain/:address');
+
     try {
         if (!Moralis.Core.isStarted) {
             await Moralis.start({
                 apiKey: process.env.MORALIS_API_KEY
             });
         }
-        
+
         const chain = EvmChain[req.params.chain];
 
         const address = req.params.address;
-        
+
         const response = await Moralis.EvmApi.nft.getWalletNFTs({
             address,
             chain
@@ -49,15 +50,16 @@ app.get("/Moralis/WalletNFTs/:chain/:address", async (req, res) => {
         console.log('Request fulfilled\n');
         res.send(response.toJSON());
     } catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: err.message,
-		})
-	}
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
 });
 // Filtered NFTs based on chain, user address and collection address
 app.get("/Moralis/WalletNFTs/:chain/:address/:collection", async (req, res) => {
-    console.log('\nRequest to /Moralis/WalletNFTs/:chain/:address/:collection')
+    console.log('\nRequest to /Moralis/WalletNFTs/:chain/:address/:collection');
+
     try {
         if (!Moralis.Core.isStarted) {
             await Moralis.start({
@@ -68,7 +70,7 @@ app.get("/Moralis/WalletNFTs/:chain/:address/:collection", async (req, res) => {
         const chain = EvmChain[req.params.chain];
 
         const address = req.params.address;
-        
+
         const response = await Moralis.EvmApi.nft.getWalletNFTs({
             address,
             chain,
@@ -83,15 +85,16 @@ app.get("/Moralis/WalletNFTs/:chain/:address/:collection", async (req, res) => {
         console.log('Request fulfilled\n');
         res.send(filteredResponse)
     } catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: err.message,
-		})
-	}
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
 });
 // Get price of a specific ERC20 token based on chain and token address
 app.get("/Moralis/TokenPrice/:chain/:address/:assetPriceId", async (req, res) => {
-    console.log('\nRequest to /Moralis/TokenPrice/:chain/:address/:assetPriceId')
+    console.log('\nRequest to /Moralis/TokenPrice/:chain/:address/:assetPriceId');
+
     try {
         if (!Moralis.Core.isStarted) {
             await Moralis.start({
@@ -135,20 +138,21 @@ app.get("/Moralis/TokenPrice/:chain/:address/:assetPriceId", async (req, res) =>
                 return res.data;
             });
 
-        const response = { price: moralisResponse.toJSON().usdPrice / requestedPrice[assetPriceId].usd}
+        const response = { price: moralisResponse.toJSON().usdPrice / requestedPrice[assetPriceId].usd }
 
         console.log('Request fulfilled\n');
         res.send(response)
     } catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: err.message,
-		})
-	}
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
 });
 // Get opensea collection Infos based on collection name
 app.get("/QuarryDraw/OpenseaCollection/:collectionName", async (req, res) => {
-    console.log('\nRequest to /QuarryDraw/OpenseaCollection/:collectionName')
+    console.log('\nRequest to /QuarryDraw/OpenseaCollection/:collectionName');
+
     try {
         let requestURL = "https://api.opensea.io/api/v1/collection/" + req.params.collectionName;
         let response;
@@ -158,15 +162,15 @@ app.get("/QuarryDraw/OpenseaCollection/:collectionName", async (req, res) => {
                 console.log("Correct server response");
                 return res.data;
             });
-        
+
         console.log('Request fulfilled\n');
         res.send(response)
     } catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: err.message,
-		})
-	}
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
 });
 // Get opensea collection floor and/or marketcap based on collection name and valued by asset
 app.get("/QuarryDraw/OpenseaCollection/:collectionName/:assetPriceId/:floor/:marketcap", async (req, res) => {
@@ -191,7 +195,7 @@ app.get("/QuarryDraw/OpenseaCollection/:collectionName/:assetPriceId/:floor/:mar
                 correctId = true
             }
         }
-        if (!correctId) throw {message: "WRONG_ID, availability at https://api.coingecko.com/api/v3/coins/list"};
+        if (!correctId) throw { message: "WRONG_ID, availability at https://api.coingecko.com/api/v3/coins/list" };
 
         // Get asset price over eth
         let assetPriceInEth;
@@ -224,9 +228,9 @@ app.get("/QuarryDraw/OpenseaCollection/:collectionName/:assetPriceId/:floor/:mar
         console.log('Request fulfilled\n');
         res.send(response);
     } catch (err) {
-		return res.status(500).json({
-			success: false,
-			message: err.message,
-		})
-	}
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
 });
