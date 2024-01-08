@@ -19,7 +19,7 @@ Get opensea collection Infos based on collection name:
 * `GET /QuarryDraw/OpenseaCollection/:collectionName/`
 
 Get opensea collection floor and/or marketcap based on collection name and valued by asset:
-* `GET /QuarryDraw/OpenseaCollection/:collectionName/:assetPriceId/:floor/:marketcap`
+* `GET /QuarryDraw/OpenseaCollection/:collectionName/:assetPriceId/:floor/:marketcap/`
 
 ## Usage
 
